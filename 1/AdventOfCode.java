@@ -13,6 +13,7 @@ class AdventOfCode {
         List<Integer> leftNumbers = new ArrayList<>();
         List<Integer> rightNumbers = new ArrayList<>();
         int distanceSum = 0;
+        int similarityScoreSum = 0;
         
         // Read the file 
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -29,6 +30,7 @@ class AdventOfCode {
         leftNumbers = sortArray(leftNumbers);
         rightNumbers = sortArray(rightNumbers);
 
+        // calculate summed up distance
         int tempDistance;
         for (int i = 0; i < leftNumbers.size(); i++) {
             tempDistance = leftNumbers.get(i) - rightNumbers.get(i);
@@ -39,6 +41,18 @@ class AdventOfCode {
             distanceSum += tempDistance;
         }
         System.out.println("Distance sum: " + distanceSum);
+
+        // calculate summed up similarity
+        int tempSimilarityScore = 0;
+        for (int i = 0; i < leftNumbers.size(); i++) {
+            int currentNumberFromLeft = leftNumbers.get(i);
+            // count how many times leftNumber appears in the rightNumbers
+            int leftNumberCountInRight = countNumber(rightNumbers, currentNumberFromLeft);
+            tempSimilarityScore = currentNumberFromLeft * leftNumberCountInRight;
+            // calculate the similarityScore
+            similarityScoreSum = similarityScoreSum + tempSimilarityScore;
+        }
+        System.out.println("Similarity score sum: " + similarityScoreSum);
     }
 
     public static List<Integer> sortArray(List<Integer> numbers) {
@@ -53,5 +67,15 @@ class AdventOfCode {
             }
         }
         return numbers;
+    }
+
+    public static int countNumber (List<Integer> numbers, int number) {
+        int count = 0;
+        for (int i = 0; i < numbers.size(); i++) {
+            if (numbers.get(i) == number) {
+                count++;
+            }
+        }
+        return count;
     }
 }
