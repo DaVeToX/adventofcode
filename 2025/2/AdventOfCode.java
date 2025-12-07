@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,24 +9,49 @@ class AdventOfCode {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
 
-        File inputFile = new File("testInput.txt");
+        File inputFile = new File("input.txt");
+        long summedUpInvalidIds = 0;
 
         // Read the file
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] ranges = line.split(",");
-                for (String range : ranges) {
-                    String[] ids = range.split("-");
-                    int firstId = Integer.parseInt(ids[0].trim());
-                    int lastId = Integer.parseInt(ids[1].trim());
-                    System.out.println("firstId: " + firstId + ", lastId: " + lastId);
+                summedUpInvalidIds += sumInvalidIDs(line);
+            }
+        }
 
-                    for (int i = firstId; i <= lastId; i++) {
-                        System.out.println("Now at ID: " + i);
-                    }
+        System.out.println("Summed up invalid IDs: " + summedUpInvalidIds);
+    }
+
+    public static long sumInvalidIDs(String input) {
+
+        long sum = 0;
+        String[] ranges = input.split(",");
+
+        for (String range : ranges) {
+            range = range.trim();
+
+            String[] parts = range.split("-");
+            long start = Long.parseLong(parts[0]);
+            long end = Long.parseLong(parts[1]);
+
+            for (long i = start; i <= end; i++) {
+                if (isInvalidID(i)) {
+                    sum += i;
                 }
             }
         }
+        return sum;
     }
+
+    private static boolean isInvalidID(long id) {
+        String s = Long.toString(id);
+
+        int half = s.length() / 2;
+        String first = s.substring(0, half);
+        String second = s.substring(half);
+
+        return first.equals(second);
+    }
+
 }
