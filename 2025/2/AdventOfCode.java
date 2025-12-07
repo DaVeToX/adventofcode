@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,37 +7,25 @@ import java.io.IOException;
 class AdventOfCode {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        // read input from input.txt 
-        File inputFile = new File("input.txt");
-        int currentPosition = 50, tempPosition = 50, password = 0, steps;
-        char direction;
+
+        File inputFile = new File("testInput.txt");
 
         // Read the file
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                steps = Integer.parseInt(line.substring(1));
-                direction = line.charAt(0);
-                System.out.println("Current Position: " + currentPosition);
+                String[] ranges = line.split(",");
+                for (String range : ranges) {
+                    String[] ids = range.split("-");
+                    int firstId = Integer.parseInt(ids[0].trim());
+                    int lastId = Integer.parseInt(ids[1].trim());
+                    System.out.println("firstId: " + firstId + ", lastId: " + lastId);
 
-                switch (direction) {
-                    case 'L':
-                        currentPosition = (currentPosition - steps) % 100;
-                        if (currentPosition < 0) {
-                            currentPosition += 100;
-                        }
-                        break;
-                    case 'R':
-                        currentPosition = (currentPosition + steps) % 100;
-                        break;
-                    default:
-                        System.out.println("Invalid direction: " + direction);
-                }
-                if (currentPosition == 0) {
-                    password++;
+                    for (int i = firstId; i <= lastId; i++) {
+                        System.out.println("Now at ID: " + i);
+                    }
                 }
             }
-            System.out.println("Passwort = " + password);
         }
     }
 }
